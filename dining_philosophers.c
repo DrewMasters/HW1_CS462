@@ -14,7 +14,6 @@ pthread_t philosphers[np];
 
 void *eat(int i)
 {
-	sleep(3);
 	printf("Philospher %i is thinking\n",i);
 	
 	while(1){
@@ -26,7 +25,7 @@ void *eat(int i)
 			printf("philospher %i is done eating\n", i);
 		}
 		else{
-			sleep(rand()%3+1);
+			sleep(1);
 			if (pthread_mutex_trylock(&forks[i])==0){
 				printf("Philospher %i is eating\n",i);
 				pthread_mutex_unlock(&forks[i]);
