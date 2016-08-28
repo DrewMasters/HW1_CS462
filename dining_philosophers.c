@@ -14,19 +14,31 @@ pthread_t philosphers[np];
 
 void *eat(int i)
 {
-	int ne=rand()%5+1;
-	printf("Philospher %i will eat %d times\n", i, ne);
 	sleep(3);
 	printf("Philospher %i is thinking\n",i);
 	
-	/*	for (int j=0; j > ne; j++){*/
-	/*while(1){*/
+	while(1){
 		pthread_mutex_lock(&forks[i]);
-		pthread_mutex_lock(&forks[(i+4)%5]);
-		printf("Philospher %i is eating\n", i);
-		pthread_mutex_unlock(&forks[i]);
-		pthread_mutex_unlock(&forks[(i+4)%5]);
-		printf("philospher %i is done eating\n", i);
+		if (pthread_mutex_trylock(&forks[i])==0){
+			printf("Philospher %i is eating\n",i);
+			pthread_mutex_unlock(&forks[i]);
+			pthread_mutex_unlock(&forks[(i+4)%5]);
+			printf("philospher %i is done eating\n", i);
+		}
+		else{
+			sleep(rand()%3+1);
+			if (pthread_mutex_trylock(&forks[i])==0){
+				printf("Philospher %i is eating\n",i);
+				pthread_mutex_unlock(&forks[i]);
+				pthread_mutex_unlock(&forks[(i+4)%5]);
+				printf("philospher %i is done eating\n", i);
+			}
+			else
+			{
+				pthread_mutex_unlock(&forks[i]);
+				pthread_mutex_unlock(&forks[(i+4)%5]);
+			}
+		}
 	}
 
 	return(NULL);
