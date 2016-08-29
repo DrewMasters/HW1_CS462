@@ -20,6 +20,8 @@ void *eat(int i)
 		pthread_mutex_lock(&forks[i]);
 		if (pthread_mutex_trylock(&forks[i])==0){
 			printf("Philospher %i is eating\n",i);
+			printf("forks %i and %i are taken by philoshpher %i\n", i, (i+4)%5 ,i);
+			sleep(1);
 			pthread_mutex_unlock(&forks[i]);
 			pthread_mutex_unlock(&forks[(i+4)%5]);
 			printf("philospher %i is done eating\n", i);
@@ -28,6 +30,8 @@ void *eat(int i)
 			sleep(1);
 			if (pthread_mutex_trylock(&forks[i])==0){
 				printf("Philospher %i is eating\n",i);
+				printf("forks %i and %i are taken by philoshpher %i\n", i, (i+4)%5 ,i);
+				sleep(1);
 				pthread_mutex_unlock(&forks[i]);
 				pthread_mutex_unlock(&forks[(i+4)%5]);
 				printf("philospher %i is done eating\n", i);
