@@ -14,38 +14,26 @@ pthread_t philosphers[np];
 
 void *eat(int i)
 {
-	printf("Philospher %i is thinking\n",i);
+	/*printf("Philospher %i is thinking\n",i);*/
 	
 	while(1){
-		pthread_mutex_lock(&forks[i]);
-		printf("Philosopher %i has taken fork %i\n",i,i);
-		printf("Philosopher %i is about to try to take fork %i\n",i, (i+4)%5);
-		if (pthread_mutex_lock(&forks[(i+4)%5])==0){
-			printf("got forks on first try\n");
+		pthread_mutex_trylock(&forks[i]);
+		/*printf("Philosopher %i has taken fork %i\n",i,i);
+		printf("Philosopher %i is about to try to take fork %i\n",i, (i+1)%5);*/
+		if (pthread_mutex_trylock(&forks[(i+1)%5])==0){
+			/*printf("got forks on first try\n");
 			printf("Philospher %i is eating\n",i);
-			printf("forks %i and %i are taken by philoshpher %i\n", i, (i+4)%5 ,i);
+			printf("forks %i and %i are taken by philoshpher %i\n", i, (i+1)%5 ,i);*/
 			pthread_mutex_unlock(&forks[i]);
-			printf("fork %i is free\n",i);
-			pthread_mutex_unlock(&forks[(i+4)%5]);
-			printf("fork %i is free\n",(i+4)%5);
+			/*printf("fork %i is free\n",i);*/
+			pthread_mutex_unlock(&forks[(i+1)%5]);
+			/*printf("fork %i is free\n",(i+1)%5);*/
 			printf("philospher %i is done eating\n", i);
+			sleep(rand()%3);
 		}
 		else{
-			sleep(1);
-			if (pthread_mutex_lock(&forks[(i+4)%5])==0){
-				printf("had to wait on fork %i\n", i);
-				printf("Philospher %i is eating\n",i);
-				printf("forks %i and %i are taken by philoshpher %i\n", i, (i+4)%5 ,i);
-				pthread_mutex_unlock(&forks[i]);
-				printf("fork %i is free\n",i);
-				pthread_mutex_unlock(&forks[(i+4)%5]);
-				printf("fork %i is free\n",(i+4)%5);
-				printf("philospher %i is done eating\n", i);
-			}
-			else
-			{
-				pthread_mutex_unlock(&forks[i]);
-			}
+			/*printf("fork %i already taken philosopher %i giving up fork %i\n", (i+1)%5,i,i);*/
+			pthread_mutex_unlock(&forks[i]);
 		}
 	}
 
