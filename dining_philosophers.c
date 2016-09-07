@@ -54,6 +54,7 @@ void *eat(int i)
 		/*try to get the "right" fork*/
 		if (pthread_mutex_trylock(&forks[(i+1)%5])==0){
 			/*if you can get the second fork eat than give up the fork*/
+			sleep(rand()%3);
 			pthread_mutex_unlock(&forks[i]);
 			pthread_mutex_unlock(&forks[(i+1)%5]);
 			printf("philospher %i is done eating\n", i);
